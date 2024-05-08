@@ -55,6 +55,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+    ports:
+      - 5432:5432
      
   solr:
     image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
@@ -69,3 +71,13 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-e", "QUIT"]
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "bruna.silva@dcomp.ufs.br"
+      PGADMIN_DEFAULT_PASSWORD: "TAES"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
